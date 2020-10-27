@@ -1,21 +1,20 @@
 const chalk = require('chalk')
-const figlet = require('figlet');
 const yargonaut = require('yargonaut')
-.style('blue.bold')
-.style('blue.yellow', 'required')
-.errorsStyle('red.bold')
+    .style('blue.bold')
+    .style('blue.yellow', 'required')
+    .errorsStyle('red.bold')
 
 const yargs = require('yargs')
-const notes = require('./notes.js')
+const noteHandler = require('./noteHandler.js')
 
-titleFig = function() {
+titleFig = function () {
     figlet.text('EDENS NOTES!', {
         font: 'big',
         horizontalLayout: 'default',
         verticalLayout: 'default',
         width: 100,
         whitespaceBreak: true
-    }, function(err, data) {
+    }, function (err, data) {
         if (err) {
             console.log('Something went wrong...');
             console.dir(err);
@@ -32,9 +31,9 @@ yargs.version('0.1.0')
 //Create add command
 yargs
     .command({
-        command: (['add', 'a', 'new']), 
+        command: (['add', 'a', 'new']),
         describe: 'Add a new note',
-        builder: { 
+        builder: {
             title: {
                 alias: 't',
                 describe: 'Note Title',
@@ -48,35 +47,34 @@ yargs
                 type: 'string'
             }
         },
-        handler: function(argv) {
-            console.log('Title: ' + argv.title)
-            console.log('Body: ' + argv.body)
+        handler: function (argv) {
+            noteHandler.addNote(argv.title, argv.body)
         }
-})
+    })
 
 //Create Remove command
 yargs.command({
-    command: (['remove', 'r','d', 'delete']),
+    command: (['remove', 'r', 'd', 'delete']),
     describe: 'Remove a note',
-    handler: function() {
+    handler: function () {
         console.log('Deleting note!')
     }
 })
 
 //Create List command
 yargs.command({
-    command: (['list','l']),
+    command: (['list', 'l']),
     describe: 'Lists all notes',
-    handler: function() {
+    handler: function () {
         console.log('Listing notes!')
     }
 })
 
 //Create Read command
 yargs.command({
-    command: (['read','r','open']),
+    command: (['read', 'r', 'open']),
     describe: 'Read a notes',
-    handler: function() {
+    handler: function () {
         console.log('Reading a note!')
     }
 })
