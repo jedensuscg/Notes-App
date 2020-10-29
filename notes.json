@@ -1,14 +1,1 @@
-[
-    {
-        "title": "First Note",
-        "body": "The body of the first note."
-    },
-    {
-        "title": "Second Note",
-        "body": "yay, another note has appeared."
-    },
-    {
-        "title": "Third  Note",
-        "body": "yay, another note has appeared."
-    }
-]
+[{"title":"First Note","body":"This is the first note"}]

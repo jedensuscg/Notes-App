@@ -1,4 +1,5 @@
 const chalk = require('chalk')
+const { argv } = require('yargs')
 const yargonaut = require('yargonaut')
     .style('blue.bold')
     .style('blue.yellow', 'required')
@@ -29,8 +30,7 @@ titleFig = function () {
 yargs.version('0.1.0')
 
 //Create add command
-yargs
-    .command({
+yargs.command({
         command: (['add', 'a', 'new']),
         describe: 'Add a new note',
         builder: {
@@ -56,8 +56,16 @@ yargs
 yargs.command({
     command: (['remove', 'r', 'd', 'delete']),
     describe: 'Remove a note',
-    handler: function () {
-        console.log('Deleting note!')
+    builder: {
+        title: {
+            alias: 't',
+            describe: 'Title of note to remove',
+            demandOption: true,
+            type: 'string'
+        },
+    },
+    handler: function (argv) {
+        noteHandler.removeNote(argv.title)
     }
 })
 
