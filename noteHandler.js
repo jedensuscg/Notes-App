@@ -13,6 +13,7 @@ const listNotes = () => {
 };
 
 const addNote = (title, body) => {
+    debugger
     const notes = loadNotes();
     const lastNote = notes[notes.length - 1]
     let index = 0
@@ -61,7 +62,6 @@ const removeNote = (index) => {
     if (notesToKeep.length < notes.length) {
         console.log(chalk.green.inverse(`Removed note titled '${noteToDelete.title}'`))
         saveNotes(notesToKeep)
-        console.log(notesToKeep)
     } else {
         console.log(chalk.red.inverse(`A note with that index does not exist!`))
     }
@@ -80,7 +80,6 @@ const loadNotes = () => {
 };
 
 const saveNotes = (notes) => {
-    console.log("saving notes" + notes)
     const dataJSON = JSON.stringify(notes);
     fs.writeFileSync(noteFile, dataJSON);
 };

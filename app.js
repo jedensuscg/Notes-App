@@ -26,7 +26,10 @@ yargs.command({
             demandOption: true,
             type: 'string'
         }
-    }
+    },
+    handler() {
+        noteHandler.addNote(argv.title, argv.body)
+    },
 })
 
 //Create Read command
