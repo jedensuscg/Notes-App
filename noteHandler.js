@@ -2,47 +2,73 @@ const fs = require("fs");
 const chalk = require('chalk')
 const noteFile = 'notes.json'
 
-const getNotes = function () {
-    return "Your Notes...";
+const listNotes = () => {
+    const notes = loadNotes();
+    console.log(chalk.blue.bold("YOUR NOTES"))
+    notes.forEach(note => {
+        console.log(chalk.blue(`(${note.index})`) + ` ${note.title}`)
+    });
+    console.log('To read a note by index, type ' + chalk.yellow(`node add.js read --index="<index>"`))
+    console.log('To read a note by title, type ' + chalk.yellow(`node add.js read --title="<title>"`))
 };
 
-const addNote = function (title, body) {
+const addNote = (title, body) => {
     const notes = loadNotes();
-
+    const lastNote = notes[notes.length - 1]
+    let index = 0
     //Check for duplicate note Title, case sensetive
-    const duplicateNotes = notes.filter(function (note) {
-        return note.title.toLowerCase() === title.toLowerCase();
-    });
+    const duplicateNote = notes.find((note) => note.title.toLowerCase() === title.toLowerCase())
 
-    if (duplicateNotes.length === 0) {
+    try {
+        index = lastNote.index
+    } catch (err) {
+        index = 0
+    }
+
+    if (!duplicateNote) {
+        index += 1
         notes.push({
+            index: index,
             title: title,
             body: body,
         });
         saveNotes(notes);
-        console.log(`Added new note to file with Title: ${title}`);
+        console.log(chalk.green.inverse(`Added new note to file with Title: "${title}"`));
     } else {
-        console.log(chalk.red("Note title already exists"));
+        console.log(chalk.red.inverse("A note with that title already exists"));
     }
 };
 
-const removeNote = function (title) {
-    console.log(title)
+const readNote = (index) => {
     const notes = loadNotes();
-    const noteExists = notes.filter(function (note) {
-        return note.title.toLowerCase()=== title.toLowerCase();
-    });
+    const noteToRead = notes.find((note) => note.index === index)
 
-    if (noteExists.length != 0) {
-        console.log(`Removed note titled ${title}`)
+    if (noteToRead) {
+        console.log(chalk.blue.inverse(`${noteToRead.title}:`) + ` ${noteToRead.body}W`)
     } else {
-        console.log(chalk.red(`A note titled ${title} does not exist!`))
+        console.log(chalk.red.inverse("No note with that index."))
     }
+}
 
+const removeNote = (index) => {
+    const notes = loadNotes();
+    const noteToDelete = notes.find((note) => note.index === index)
+
+    const notesToKeep = notes.filter(function (note) {
+        return note.index !== index
+    })
+    if (notesToKeep.length < notes.length) {
+        console.log(chalk.green.inverse(`Removed note titled '${noteToDelete.title}'`))
+        saveNotes(notesToKeep)
+        console.log(notesToKeep)
+    } else {
+        console.log(chalk.red.inverse(`A note with that index does not exist!`))
+    }
+    recountIndex(notesToKeep)
 }
 
 // #region HELPER FUNCTIONS
-const loadNotes = function () {
+const loadNotes = () => {
     try {
         const dataBuffer = fs.readFileSync(noteFile);
         const dataJSON = dataBuffer.toString();
@@ -52,14 +78,25 @@ const loadNotes = function () {
     }
 };
 
-const saveNotes = function (notes) {
+const saveNotes = (notes) => {
+    console.log("saving notes" + notes)
     const dataJSON = JSON.stringify(notes);
     fs.writeFileSync(noteFile, dataJSON);
 };
+
+const recountIndex = (notes) => {
+    let index = 1
+    notes.forEach(note => {
+        note.index = index
+        index += 1
+    })
+    saveNotes(notes)
+}
 // #endregion
 
 module.exports = {
-    getNotes: getNotes,
+    listNotes: listNotes,
     addNote: addNote,
+    readNote: readNote,
     removeNote: removeNote
 };
