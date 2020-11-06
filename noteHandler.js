@@ -44,7 +44,8 @@ const readNote = (index) => {
     const noteToRead = notes.find((note) => note.index === index)
 
     if (noteToRead) {
-        console.log(chalk.blue.inverse(`${noteToRead.title}:`) + ` ${noteToRead.body}W`)
+        console.log(chalk.blue.inverse(`${noteToRead.title}`))
+        console.log(`${noteToRead.body}`)
     } else {
         console.log(chalk.red.inverse("No note with that index."))
     }

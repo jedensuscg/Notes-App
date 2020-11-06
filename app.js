@@ -1,29 +1,9 @@
 const chalk = require('chalk')
 const { argv } = require('yargs')
-const yargonaut = require('yargonaut')
-    .style('blue.bold')
-    .style('blue.yellow', 'required')
-    .errorsStyle('red.bold')
 
 const yargs = require('yargs')
 const noteHandler = require('./noteHandler.js')
 
-titleFig = () => {
-    figlet.text('EDENS NOTES!', {
-        font: 'big',
-        horizontalLayout: 'default',
-        verticalLayout: 'default',
-        width: 100,
-        whitespaceBreak: true
-    }, function (err, data) {
-        if (err) {
-            console.log('Something went wrong...');
-            console.dir(err);
-            return;
-        }
-        console.log(chalk.yellowBright(data));
-    });
-}
 
 
 //Customize yargs version
